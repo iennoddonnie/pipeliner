@@ -734,11 +734,7 @@ abstract class BasePipeline implements Serializable {
         Map joblist = [:]
         //List for parallels for this pipeline
         def parallelList = []
-
-        //initializeFromEnvironment()
-        //processUserInput()
         
-        //this.script.timeout(time: this.pipelineTimeout, unit: 'MINUTES'){
         def stageInputs = getStageInputs()
         stageInputs.eachWithIndex {
             stageInput, listIndex ->
@@ -774,7 +770,6 @@ abstract class BasePipeline implements Serializable {
                     }
                 }
         }
-        //}
 
         try {
             this.script.parallel joblist
