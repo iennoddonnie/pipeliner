@@ -34,9 +34,9 @@ abstract class BasePipeline implements Serializable {
      */
     protected String nodeLabelExpr = ''
     /**
-     * The timeout for pipeline in HOURS
+     * The timeout for pipeline in MINUTES
      */
-    protected Integer pipelineTimeout = 3
+    protected Integer pipelineTimeout = 210
     /**
      * The docker container which from private registry should be used to run this pipeline
      */
@@ -715,11 +715,11 @@ abstract class BasePipeline implements Serializable {
      * @return A Map of the input-output parameters passed to and modified by this pipeline
      */
     Map run() {
-        this.script.timeout(time: this.pipelineTimeout, unit: 'HOURS'){
+        //this.script.timeout(time: this.pipelineTimeout, unit: 'HOURS'){
             this.script.timestamps {
                return runInternal()
             }
-        }
+        //}
     }
 
     /**
@@ -735,7 +735,8 @@ abstract class BasePipeline implements Serializable {
 
         initializeFromEnvironment()
         processUserInput()
-
+        
+        this.script.timeout(time: this.pipelineTimeout, unit: 'MINUTES'){
         def stageInputs = getStageInputs()
         stageInputs.eachWithIndex {
             stageInput, listIndex ->
@@ -770,6 +771,7 @@ abstract class BasePipeline implements Serializable {
                         throw ex
                     }
                 }
+        }
         }
 
         try {
