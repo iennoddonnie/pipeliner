@@ -715,11 +715,13 @@ abstract class BasePipeline implements Serializable {
      * @return A Map of the input-output parameters passed to and modified by this pipeline
      */
     Map run() {
-        //this.script.timeout(time: this.pipelineTimeout, unit: 'HOURS'){
+        initializeFromEnvironment()
+        processUserInput()
+        this.script.timeout(time: this.pipelineTimeout, unit: 'MINUTES'){
             this.script.timestamps {
                return runInternal()
             }
-        //}
+        }
     }
 
     /**
@@ -733,10 +735,10 @@ abstract class BasePipeline implements Serializable {
         //List for parallels for this pipeline
         def parallelList = []
 
-        initializeFromEnvironment()
-        processUserInput()
+        //initializeFromEnvironment()
+        //processUserInput()
         
-        this.script.timeout(time: this.pipelineTimeout, unit: 'MINUTES'){
+        //this.script.timeout(time: this.pipelineTimeout, unit: 'MINUTES'){
         def stageInputs = getStageInputs()
         stageInputs.eachWithIndex {
             stageInput, listIndex ->
@@ -772,7 +774,7 @@ abstract class BasePipeline implements Serializable {
                     }
                 }
         }
-        }
+        //}
 
         try {
             this.script.parallel joblist
